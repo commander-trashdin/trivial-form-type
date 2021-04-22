@@ -2,7 +2,7 @@
   :license "MIT"
   :serial t
   :depends-on ("introspect-environment"
-               "cl-environments"
+               (:version "cl-environments" "0.3")
                "alexandria"
                "fiveam"
                ;; https://github.com/digikar99/trivial-types

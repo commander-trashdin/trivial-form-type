@@ -37,3 +37,23 @@
   (5am:is-false (nth-value 1 (form-type '(#:unknown-function 5))))
   (5am:is-true  (nth-value 0 (form-type '(#:unknown-function 5))))
   (5am:is-true  (nth-value 1 (form-type '(the t (#:unknown-function 5))))))
+
+
+
+(defun expand (type-specifier &optional env)
+  "Expands the TYPE-SPECIFIER to a canonical representation in the ENV."
+  ;; TODO Fix for other then SBCL to accept the environment.
+  ;; Since this isn't my code, I'm unsure what exactly "fix" was supposed to mean
+  (declare (ignorable env))
+  #+abcl          (system::expand-deftype type-specifier)
+  #+xcl           (system::expand-deftype type-specifier)
+  #+allegro       (excl:normalize-type type :default type-specifier)
+  #+ccl           (ccl::type-expand type-specifier)
+  #+clisp         (ext:type-expand type-specifier)
+  #+cmu           (kernel:type-expand type-specifier)
+  #+ecl           (si::expand-deftype type-specifier)
+  #+mkcl          (si::expand-deftype type-specifier)
+  #+lispworks     (type:expand-user-type type-specifier)
+  #+sbcl          (sb-ext:typexpand-all type-specifier env)
+  #-(or abcl allegro ccl clisp cmu ecl lispworks mkcl sbcl xcl)
+  (assert nil nil "EXPAND unimplemented."))

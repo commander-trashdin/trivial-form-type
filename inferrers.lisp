@@ -167,3 +167,19 @@
               (form-type '(make-string 3 :element-type 'base-char))))
   (is (equalp '(simple-base-string cl:*)
               (form-type '(make-string a :element-type 'base-char)))))
+
+
+
+
+(defmethod %form-type ((first (eql 'aref)) form &optional env)
+  (let ((ar-type (expand (form-type (second form) env))))
+    (if (listp ar-type)
+        (second ar-type)
+        t)))
+
+
+(defmethod %form-type ((first (eql 'row-major-aref)) form &optional env)
+  (let ((ar-type (expand (form-type (second form) env))))
+    (if (listp ar-type)
+        (second ar-type)
+        t)))
